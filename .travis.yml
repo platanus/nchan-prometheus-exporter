@@ -7,9 +7,9 @@ go:
 script:
 - echo "Nchan Prometheus Exporter - commit:${TRAVIS_COMMIT}"
 - make test
-- make container
+- make container VERSION=$TRAVIS_BRANCH
 after_success:
-- if [[ "$TRAVIS_BRANCH" == "master" ]]; then docker login -u $DOCKER_USERNAME
+- if [[ -z "$TRAVIS_TAG" ]]; then docker login -u $DOCKER_USERNAME
   -p $DOCKER_PASSWORD ; make push ; fi
 env:
   global:
