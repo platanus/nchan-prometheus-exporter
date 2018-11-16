@@ -8,8 +8,8 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/nginxinc/nginx-prometheus-exporter/client"
-	"github.com/nginxinc/nginx-prometheus-exporter/collector"
+	"github.com/platanus/nchan-prometheus-exporter/collector"
+	"github.com/platanus/nchan-prometheus-exporter/nginxClient"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
@@ -68,12 +68,12 @@ func main() {
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: !*sslVerify},
 	}
 
-	client, err := client.NewNginxClient(&http.Client{Transport: tr}, *scrapeURI)
+	nginxClient, err := nginxClient.NewNginxClient(&http.Client{Transport: tr}, *scrapeURI)
 	if err != nil {
 		log.Fatalf("Could not create Nginx Client: %v", err)
 	}
 
-	registry.MustRegister(collector.NewNginxCollector(client, "nginx"))
+	registry.MustRegister(collector.NewNginxCollector(nginxClient, "nginx"))
 
 	http.Handle(*metricsPath, promhttp.HandlerFor(registry, promhttp.HandlerOpts{}))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

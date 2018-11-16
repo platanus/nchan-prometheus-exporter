@@ -43,7 +43,7 @@ To suggest an enhancement, please create an issue on GitHub with the label `enha
 ### Open a Pull Request
 
 * Fork the repo, create a branch, submit a PR when your changes are tested and ready for review
-* Fill in [our pull request template](https://github.com/nginxinc/nginx-prometheus-exporter/issues/new?template=bug_report.md)
+* Fill in [our pull request template](https://github.com/platanus/nchan-prometheus-exporter/issues/new?template=bug_report.md)
 
 Note: if you’d like to implement a new feature, please consider creating a feature request issue first to start a discussion about the feature.
 

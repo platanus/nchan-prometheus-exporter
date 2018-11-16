@@ -1,4 +1,4 @@
-package client
+package nginxClient
 
 import (
 	"fmt"

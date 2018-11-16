@@ -4,7 +4,7 @@ Describe the use case and detail of the change. If this PR addresses an issue on
 ### Checklist
 Before creating a PR, run through this checklist and mark each as complete.
 
-- [ ] I have read the [CONTRIBUTING](https://github.com/nginxinc/nginx-prometheus-exporter/blob/master/CONTRIBUTING.md) guide
+- [ ] I have read the [CONTRIBUTING](https://github.com/platanus/nchan-prometheus-exporter/blob/master/CONTRIBUTING.md) guide
 - [ ] I have proven my fix is effective or that my feature works
 - [ ] I have checked that all unit tests pass after adding my changes
 - [ ] I have ensured the README is up to date

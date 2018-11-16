@@ -4,19 +4,19 @@ import (
 	"log"
 	"sync"
 
-	"github.com/nginxinc/nginx-prometheus-exporter/client"
+	"github.com/platanus/nchan-prometheus-exporter/nginxClient"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
 // NginxCollector collects NGINX metrics. It implements prometheus.Collector interface.
 type NginxCollector struct {
-	nginxClient *client.NginxClient
+	nginxClient *nginxClient.NginxClient
 	metrics     map[string]*prometheus.Desc
 	mutex       sync.Mutex
 }
 
 // NewNginxCollector creates an NginxCollector.
-func NewNginxCollector(nginxClient *client.NginxClient, namespace string) *NginxCollector {
+func NewNginxCollector(nginxClient *nginxClient.NginxClient, namespace string) *NginxCollector {
 	return &NginxCollector{
 		nginxClient: nginxClient,
 		metrics: map[string]*prometheus.Desc{
