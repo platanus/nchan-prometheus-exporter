@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/platanus/nchan-prometheus-exporter.svg?branch=master)](https://travis-ci.org/platanus/nchan-prometheus-exporter)  [![FOSSA Status](https://app.fossa.io/api/projects/custom%2B1062%2Fgithub.com%2Fplatanus%2Fnchan-prometheus-exporter.svg?type=shield)](https://app.fossa.io/projects/custom%2B1062%2Fgithub.com%2Fplatanus%2Fnchan-prometheus-exporter?ref=badge_shield)  [![Go Report Card](https://goreportcard.com/badge/github.com/platanus/nchan-prometheus-exporter)](https://goreportcard.com/report/github.com/platanus/nchan-prometheus-exporter)
+[![Build Status](https://travis-ci.org/platanus/nchan-prometheus-exporter.svg?branch=master)](https://travis-ci.org/platanus/nchan-prometheus-exporter) [![](https://images.microbadger.com/badges/version/platanus/nchan-prometheus-exporter.svg)](https://microbadger.com/images/platanus/nchan-prometheus-exporter "Get your own version badge on microbadger.com") [![Go Report Card](https://goreportcard.com/badge/github.com/platanus/nchan-prometheus-exporter)](https://goreportcard.com/report/github.com/platanus/nchan-prometheus-exporter)
 
 # Nchan Prometheus Exporter
 
@@ -116,6 +116,14 @@ Note: the binary is built for the OS/arch of your machine. To build binaries for
 
 The binary is built with the name `nchan-prometheus-exporter`.
 
+## Credits
+
+Thank you [contributors](https://github.com/platanus/nchan-prometheus-exporter/graphs/contributors)!
+
+<img src="http://platan.us/gravatar_with_text.png" alt="Platanus" width="250"/>
+
+Nchan Prometheus Exporter is maintained by [platanus](http://platan.us).
+
 ## License
 
-[Apache License, Version 2.0](LICENSE).
+Cordova Plugin Flavors is © 2017 platanus, spa. It is free software and may be redistributed under the terms specified in the LICENSE file.
