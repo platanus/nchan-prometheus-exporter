@@ -2,7 +2,7 @@ package nchanClient
 
 import "testing"
 
-const validStabStats = "total published messages: 123\nstored messages: 54353\nshared memory used: 12K\nchannels: 34\nsubscribers: 5434535\nredis pending commands: 48\nredis connected servers: 65\ntotal interprocess alerts received: 43\ninterprocess alerts in transit: 654\ninterprocess queued alerts: 765\ntotal interprocess send delay: 534\ntotal interprocess receive delay: 46\nnchan version: 1.1.5\n"
+const validStabStats = "total published messages: 123\nstored messages: 54353\nshared memory used: 12K\nshared memory limit: 131072K\nchannels: 34\nsubscribers: 5434535\nredis pending commands: 48\nredis connected servers: 65\ntotal interprocess alerts received: 43\ninterprocess alerts in transit: 654\ninterprocess queued alerts: 765\ntotal interprocess send delay: 534\ntotal interprocess receive delay: 46\nnchan version: 1.1.5\n"
 
 func TestParseStubStatsValidInput(t *testing.T) {
 	var tests = []struct {
@@ -17,9 +17,10 @@ func TestParseStubStatsValidInput(t *testing.T) {
 					PendingCommands:  48,
 					ConnectedServers: 65,
 				},
-				Channels:         34,
-				Subscribers:      5434535,
-				SharedMemoryUsed: 12,
+				Channels:          34,
+				Subscribers:       5434535,
+				SharedMemoryUsed:  12,
+				SharedMemoryLimit: 131072,
 				Interprocess: StubInterprocess{
 					AlertsInTransit:     654,
 					QueuedAlerts:        765,

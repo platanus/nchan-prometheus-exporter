@@ -23,6 +23,7 @@ func NewNchanCollector(nchanClient *nchanClient.NchanClient, namespace string) *
 			"messages_published_total":           newGlobalMetric(namespace, "messages_published_total", "Number of messages published to all channels through this Nchan server"),
 			"messages_stored":                    newGlobalMetric(namespace, "messages_stored", "Number of messages currently buffered in memory"),
 			"shared_memory_used":                 newGlobalMetric(namespace, "shared_memory_used", "Total shared memory used for buffering messages, storing channel information, and other purposes"),
+			"shared_memory_limit":                newGlobalMetric(namespace, "shared_memory_limit", "Total shared memory used for buffering messages, storing channel information, and other purposes"),
 			"channels":                           newGlobalMetric(namespace, "channels", "Number of channels present on this Nchan server"),
 			"subscribers":                        newGlobalMetric(namespace, "subscribers", "Number of subscribers to all channels on this Nchan server"),
 			"redis_pending_commands":             newGlobalMetric(namespace, "redis_pending_commands", "Number of commands sent to Redis that are awaiting a reply"),
@@ -61,6 +62,8 @@ func (c *NchanCollector) Collect(ch chan<- prometheus.Metric) {
 		prometheus.CounterValue, float64(stats.Messages.Stored))
 	ch <- prometheus.MustNewConstMetric(c.metrics["shared_memory_used"],
 		prometheus.GaugeValue, float64(stats.SharedMemoryUsed))
+	ch <- prometheus.MustNewConstMetric(c.metrics["shared_memory_limit"],
+		prometheus.GaugeValue, float64(stats.SharedMemoryLimit))
 	ch <- prometheus.MustNewConstMetric(c.metrics["channels"],
 		prometheus.GaugeValue, float64(stats.Channels))
 	ch <- prometheus.MustNewConstMetric(c.metrics["subscribers"],
