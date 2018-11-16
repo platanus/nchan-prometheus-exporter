@@ -10,7 +10,7 @@ script:
 - make container VERSION=$TRAVIS_BRANCH
 after_success:
 - if [[ -n "$TRAVIS_TAG" ]]; then docker login -u $DOCKER_USERNAME
-  -p $DOCKER_PASSWORD ; make push ; fi
+  -p $DOCKER_PASSWORD ; make push VERSION=$TRAVIS_BRANCH ; fi
 env:
   global:
   - secure: O7IvznDFFygHf3rfpmM07d55BNA8yaDnI8IF5oxkpf8rPzFGyVm21be6qSIhTHsPZ7BsO1sEmjzx2suEmPtSSLTMyDWBPc4wjqzhXzluUb14cXRUiUD0Cdhhn2TlzRMfvm7WhJxLtBTDZD6jQ4KAKSziWKuK7gRuYYICysYkxbk+jgWhNrsqii+ZbgrFINZYs2nNUHUVHjfasvRH6uaHukmMUiTELBy012XAQUsHUILBTa8obyr/xgu6p5ecqmPZuAvoFKy6LjMwZJB6wjs0Iyt/2ftj1AoMk0rPQjUZaMHGScIn+ZI27nzB0h4iB+Bn/pr3Cq6Z2ouplON8W225N/Suzfv0kXmK1pUXLgO33flQJCWUd4efHL2Pk+aKki10mH9uV6TxKkeCQwaUP30vei5q7mVBDisWryGhfHY86G9j3D/EUByz1sEOby4koWBeiCcbMYAOctqYup6AWSbKeoHhNvyl/A2FXDMjGls+z6jNb1kd5jDvSCfNVn8JUUiZbl9i76J6VsEHtQkCgNM7juZUirswYM1Bdfq4ZOQUnBd/Z1NmcjNdRr4V8Zh0VjKkDd/a8ZCe7Ob2Ut08s+J7PyHN89TOPtvdB1sLlTcD96VlRLDl4GAOhAhz92+cmOSKZ3f7ugdqD97b3zThm+wIzeGVEqtu7adJlZHMr/mUr70=
