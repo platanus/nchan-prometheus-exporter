@@ -5,7 +5,7 @@ WORKDIR /go/src/github.com/platanus/nchan-prometheus-exporter
 COPY *.go ./
 COPY vendor ./vendor
 COPY collector ./collector
-COPY client ./client
+COPY nginxClient ./nginxClient
 COPY nchanClient ./nchanClient
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags "-X main.version=${VERSION} -X main.gitCommit=${GIT_COMMIT}" -o exporter .
 
