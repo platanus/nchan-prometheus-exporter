@@ -8,7 +8,6 @@ import (
 	"os"
 	"strconv"
 
-	plusclient "github.com/nginxinc/nginx-plus-go-sdk/client"
 	"github.com/nginxinc/nginx-prometheus-exporter/client"
 	"github.com/nginxinc/nginx-prometheus-exporter/collector"
 	"github.com/prometheus/client_golang/prometheus"
@@ -43,7 +42,6 @@ var (
 	// Defaults values
 	defaultListenAddress = getEnv("LISTEN_ADDRESS", ":9113")
 	defaultMetricsPath   = getEnv("TELEMETRY_PATH", "/metrics")
-	defaultNginxPlus     = getEnvBool("NGINX_PLUS", false)
 	defaultScrapeURI     = getEnv("SCRAPE_URI", "http://127.0.0.1:8080/stub_status")
 	defaultSslVerify     = getEnvBool("SSL_VERIFY", true)
 
@@ -52,8 +50,6 @@ var (
 		"An address to listen on for web interface and telemetry. The default value can be overwritten by LISTEN_ADDRESS environment variable.")
 	metricsPath = flag.String("web.telemetry-path", defaultMetricsPath,
 		"A path under which to expose metrics. The default value can be overwritten by TELEMETRY_PATH environment variable.")
-	nginxPlus = flag.Bool("nginx.plus", defaultNginxPlus,
-		"Start the exporter for NGINX Plus. By default, the exporter is started for NGINX. The default value can be overwritten by NGINX_PLUS environment variable.")
 	scrapeURI = flag.String("nginx.scrape-uri", defaultScrapeURI,
 		`A URI for scraping NGINX or NGINX Plus metrics.
 	For NGINX, the stub_status page must be available through the URI. For NGINX Plus -- the API. The default value can be overwritten by SCRAPE_URI environment variable.`)
@@ -72,21 +68,12 @@ func main() {
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: !*sslVerify},
 	}
 
-	if *nginxPlus {
-		client, err := plusclient.NewNginxClient(&http.Client{Transport: tr}, *scrapeURI)
-		if err != nil {
-			log.Fatalf("Could not create Nginx Plus Client: %v", err)
-		}
-
-		registry.MustRegister(collector.NewNginxPlusCollector(client, "nginxplus"))
-	} else {
-		client, err := client.NewNginxClient(&http.Client{Transport: tr}, *scrapeURI)
-		if err != nil {
-			log.Fatalf("Could not create Nginx Client: %v", err)
-		}
-
-		registry.MustRegister(collector.NewNginxCollector(client, "nginx"))
+	client, err := client.NewNginxClient(&http.Client{Transport: tr}, *scrapeURI)
+	if err != nil {
+		log.Fatalf("Could not create Nginx Client: %v", err)
 	}
+
+	registry.MustRegister(collector.NewNginxCollector(client, "nginx"))
 
 	http.Handle(*metricsPath, promhttp.HandlerFor(registry, promhttp.HandlerOpts{}))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
