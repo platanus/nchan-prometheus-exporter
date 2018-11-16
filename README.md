@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/platanus/nchan-prometheus-exporter.svg?branch=master)](https://travis-ci.org/platanus/nchan-prometheus-exporter) [![](https://images.microbadger.com/badges/version/platanus/nchan-prometheus-exporter.svg)](https://microbadger.com/images/platanus/nchan-prometheus-exporter "Get your own version badge on microbadger.com") [![Go Report Card](https://goreportcard.com/badge/github.com/platanus/nchan-prometheus-exporter)](https://goreportcard.com/report/github.com/platanus/nchan-prometheus-exporter)
+[![Build Status](https://travis-ci.org/platanus/nchan-prometheus-exporter.svg?branch=master)](https://travis-ci.org/platanus/nchan-prometheus-exporter) [![](https://images.microbadger.com/badges/version/platanus/nchan-prometheus-exporter.svg)](https:/hub.docker.com/r/platanus/nchan-prometheus-exporter) [![Go Report Card](https://goreportcard.com/badge/github.com/platanus/nchan-prometheus-exporter)](https://goreportcard.com/report/github.com/platanus/nchan-prometheus-exporter)
 
 # Nchan Prometheus Exporter
 
