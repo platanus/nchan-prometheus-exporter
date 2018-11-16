@@ -16,12 +16,13 @@ type NchanClient struct {
 
 // StubStats represents Nchan stub_status metrics.
 type StubStats struct {
-	Redis            StubRedis
-	Interprocess     StubInterprocess
-	Messages         StubMessages
-	Channels         int64
-	Subscribers      int64
-	SharedMemoryUsed int64
+	Redis             StubRedis
+	Interprocess      StubInterprocess
+	Messages          StubMessages
+	Channels          int64
+	Subscribers       int64
+	SharedMemoryUsed  int64
+	SharedMemoryLimit int64
 }
 
 // StubRedis represents redis related metrics.
@@ -89,7 +90,7 @@ func parseStubStats(data []byte, stats *StubStats) error {
 	dataStr := string(data)
 
 	parts := strings.Split(dataStr, "\n")
-	if len(parts) != 14 {
+	if len(parts) != 15 {
 		return fmt.Errorf("invalid input %q", dataStr)
 	}
 
@@ -126,9 +127,20 @@ func parseStubStats(data []byte, stats *StubStats) error {
 	}
 	stats.SharedMemoryUsed = sharedMemoryUsed
 
-	channelsParts := strings.Split(strings.TrimSpace(parts[3]), " ")
+	sharedMemoryLimitParts := strings.Split(strings.TrimSpace(parts[3]), " ")
+	if len(sharedMemoryLimitParts) != 4 {
+		return fmt.Errorf("invalid input for shared memory limit %q", parts[3])
+	}
+
+	sharedMemoryLimit, err := strconv.ParseInt(strings.Replace(sharedMemoryLimitParts[3], "K", "", 1), 10, 64)
+	if err != nil {
+		return fmt.Errorf("invalid input for shared memory limit %q: %v", sharedMemoryLimitParts[3], err)
+	}
+	stats.SharedMemoryLimit = sharedMemoryLimit
+
+	channelsParts := strings.Split(strings.TrimSpace(parts[4]), " ")
 	if len(channelsParts) != 2 {
-		return fmt.Errorf("invalid input for channels %q", parts[3])
+		return fmt.Errorf("invalid input for channels %q", parts[4])
 	}
 
 	channels, err := strconv.ParseInt(channelsParts[1], 10, 64)
@@ -137,9 +149,9 @@ func parseStubStats(data []byte, stats *StubStats) error {
 	}
 	stats.Channels = channels
 
-	subscribersParts := strings.Split(strings.TrimSpace(parts[4]), " ")
+	subscribersParts := strings.Split(strings.TrimSpace(parts[5]), " ")
 	if len(subscribersParts) != 2 {
-		return fmt.Errorf("invalid input for subscribers %q", parts[4])
+		return fmt.Errorf("invalid input for subscribers %q", parts[5])
 	}
 
 	subscribers, err := strconv.ParseInt(subscribersParts[1], 10, 64)
@@ -148,9 +160,9 @@ func parseStubStats(data []byte, stats *StubStats) error {
 	}
 	stats.Subscribers = subscribers
 
-	redisPendingCommandsParts := strings.Split(strings.TrimSpace(parts[5]), " ")
+	redisPendingCommandsParts := strings.Split(strings.TrimSpace(parts[6]), " ")
 	if len(redisPendingCommandsParts) != 4 {
-		return fmt.Errorf("invalid input for redis pending commands %q", parts[5])
+		return fmt.Errorf("invalid input for redis pending commands %q", parts[6])
 	}
 
 	redisPendingCommands, err := strconv.ParseInt(redisPendingCommandsParts[3], 10, 64)
@@ -159,9 +171,9 @@ func parseStubStats(data []byte, stats *StubStats) error {
 	}
 	stats.Redis.PendingCommands = redisPendingCommands
 
-	redisConnectedServersParts := strings.Split(strings.TrimSpace(parts[6]), " ")
+	redisConnectedServersParts := strings.Split(strings.TrimSpace(parts[7]), " ")
 	if len(redisConnectedServersParts) != 4 {
-		return fmt.Errorf("invalid input for redis connected servers %q", parts[6])
+		return fmt.Errorf("invalid input for redis connected servers %q", parts[7])
 	}
 
 	redisConnectedServers, err := strconv.ParseInt(redisConnectedServersParts[3], 10, 64)
@@ -170,9 +182,9 @@ func parseStubStats(data []byte, stats *StubStats) error {
 	}
 	stats.Redis.ConnectedServers = redisConnectedServers
 
-	totalInterprocessAlertsReceivedParts := strings.Split(strings.TrimSpace(parts[7]), " ")
+	totalInterprocessAlertsReceivedParts := strings.Split(strings.TrimSpace(parts[8]), " ")
 	if len(totalInterprocessAlertsReceivedParts) != 5 {
-		return fmt.Errorf("invalid input for interprocess total alerts received %q", parts[7])
+		return fmt.Errorf("invalid input for interprocess total alerts received %q", parts[8])
 	}
 
 	totalInterprocessAlertsReceived, err := strconv.ParseInt(totalInterprocessAlertsReceivedParts[4], 10, 64)
@@ -181,9 +193,9 @@ func parseStubStats(data []byte, stats *StubStats) error {
 	}
 	stats.Interprocess.TotalAlertsReceived = totalInterprocessAlertsReceived
 
-	interprocessAlertsInTransitParts := strings.Split(strings.TrimSpace(parts[8]), " ")
+	interprocessAlertsInTransitParts := strings.Split(strings.TrimSpace(parts[9]), " ")
 	if len(interprocessAlertsInTransitParts) != 5 {
-		return fmt.Errorf("invalid input for interprocess alerts in transit %q", parts[8])
+		return fmt.Errorf("invalid input for interprocess alerts in transit %q", parts[9])
 	}
 
 	interprocessAlertsInTransit, err := strconv.ParseInt(interprocessAlertsInTransitParts[4], 10, 64)
@@ -192,9 +204,9 @@ func parseStubStats(data []byte, stats *StubStats) error {
 	}
 	stats.Interprocess.AlertsInTransit = interprocessAlertsInTransit
 
-	interprocessQueuedAlertsParts := strings.Split(strings.TrimSpace(parts[9]), " ")
+	interprocessQueuedAlertsParts := strings.Split(strings.TrimSpace(parts[10]), " ")
 	if len(interprocessQueuedAlertsParts) != 4 {
-		return fmt.Errorf("invalid input for interprocess queued alerts %q", parts[9])
+		return fmt.Errorf("invalid input for interprocess queued alerts %q", parts[10])
 	}
 
 	interprocessQueuedAlerts, err := strconv.ParseInt(interprocessQueuedAlertsParts[3], 10, 64)
@@ -203,9 +215,9 @@ func parseStubStats(data []byte, stats *StubStats) error {
 	}
 	stats.Interprocess.QueuedAlerts = interprocessQueuedAlerts
 
-	totalInterprocessSendDelayParts := strings.Split(strings.TrimSpace(parts[10]), " ")
+	totalInterprocessSendDelayParts := strings.Split(strings.TrimSpace(parts[11]), " ")
 	if len(totalInterprocessSendDelayParts) != 5 {
-		return fmt.Errorf("invalid input for interprocess total send delay %q", parts[10])
+		return fmt.Errorf("invalid input for interprocess total send delay %q", parts[11])
 	}
 
 	totalInterprocessSendDelay, err := strconv.ParseInt(totalInterprocessSendDelayParts[4], 10, 64)
@@ -214,9 +226,9 @@ func parseStubStats(data []byte, stats *StubStats) error {
 	}
 	stats.Interprocess.TotalSendDelay = totalInterprocessSendDelay
 
-	totalInterprocessReceiveDelayParts := strings.Split(strings.TrimSpace(parts[11]), " ")
+	totalInterprocessReceiveDelayParts := strings.Split(strings.TrimSpace(parts[12]), " ")
 	if len(totalInterprocessReceiveDelayParts) != 5 {
-		return fmt.Errorf("invalid input for interprocess total receive delay %q", parts[11])
+		return fmt.Errorf("invalid input for interprocess total receive delay %q", parts[12])
 	}
 
 	totalInterprocessReceiveDelay, err := strconv.ParseInt(totalInterprocessReceiveDelayParts[4], 10, 64)
