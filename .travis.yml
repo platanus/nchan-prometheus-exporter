@@ -3,14 +3,16 @@ sudo: required
 services:
 - docker
 go:
-- "1.11"
+- '1.11'
 script:
 - echo "Nchan Prometheus Exporter - commit:${TRAVIS_COMMIT}"
 - make test
 - make container
-before_install:
-- echo "PR Slug:${TRAVIS_PULL_REQUEST_SLUG}"
-- if [[ "${TRAVIS_PULL_REQUEST_SLUG}" == "platanus/nchan-prometheus-exporter" || "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
-  wget https://${fossalocation}/${fossafile} && tar xzf ${fossafile}
-  && ./fossa init
-  && FOSSA_API_KEY=${fossapush} ./fossa analyze -t nchan-prometheus-exporter -b ${TRAVIS_BRANCH}; fi
+after_success:
+- if [[ "$TRAVIS_BRANCH" == "master" ]]; then docker login -u $DOCKER_USERNAME -p
+  $DOCKER_PASSWORD ; make push ; fi
+env:
+  docker_password:
+    secure: FNaKzkqdlPN6mc+/gUjKVHiu4qXItz1u/puFXx0SPqlf12CQjMmtfZl0oSLVxn/tkjc2WXGfsIO1LPy4daeYtB4wd60vrlYM68++bVX4eWrm3CL9jkmEU5n7IYuGvqEMUqO6430dY2kgMtbcSEdCakw7tqaXMz4n+AWJlNfBu/fgQY+sfif94GEZPvdxYtHby+BQNNy2xUzDaEIJgnIgXI3b6T+T2VJ7ZV42iHh8Em4baqjYquWyqXx1GHlxBYZnJVwPGjx0T+4y9/u8+j/Qq6iiM938BJDu9T0pvq6XzVZl7glT7FJgUAMnXGFLDF4qv5OySPlg6EfdbQUCiCKhoxmO4+XDe/tSr1RUZltRjcu+zmO/C628FP97DFeqzM8kRwMh1irYmXqgON/XIF4b7LAAOzlm1VubIJ+suE3+GnTPtNOawLQJMhdoSh8x0m0tNpaMM+BaBPXy+FzsPEXxXuIeSl0psyuzbdSiUQ/k8sPlAKFX5giEVdTeXEQB8qjqrRqQugk6g/s24sizMHDdCyi5rb7icX+rr7RJ8EE1lKICiM4poWFXf1W5jxg9lj0uUxDRUpEsvw1wJtR6lr578TCHAkaNKvYVWUIVJhvFkAS+EwCtFECcVRJ3cYtoEnYGliF9+g8FjKdZvohVVTvezSJKNlTMZPyxkTp1Kgxg7JE=
+  docker_username:
+    secure: w3nfrX79KB2+H38eAV770wGna7sKQWnoFc/NtW0aydJtlO++J3/31wKCyMdAM70QmIXnvy+7H3VW/OwXy2atZkcua/fSlN0pTty+WdrMPMsSx17ATwCpnM1nlsua0pqtR0ge9F58N3EcIXqORygQSEZ0YkvwqeL/gemQm56KT6geQSiDdHCqdfF9Ccg6Xd+x5rv5aj+MiEqb60AKfw2HrtN91AdOYvcGFttk1MRtLpRol7Mc7GsOzekgv00Z0uHNPDVSWQtW1ECNiqvsf4EwPcgwuHhNeLJ5AUjio0B0KB+jYcAqC0hwA0FsT3iqgnnb9WwYjrusLUWLKdpKZgVb5YRaGn/fupcic5Uzyqod6ftu1pb2TN5W8b4NXD6W1ZjaAPP25CThSg1I0mAyScrXRSm4o2EeAdMOSaKJc+yBywQoo7NRyLByvVaFEOHhpQunsqfS5nEEuqORgv6sBkFNs0xQ0l26nBn0RI6Dd1uI16a9SCBW+E7Plp6Hws2nDoS8QM/8HRx1d4YRSsoS/oLkrg3uH0XfIMIFaN80BQHr2YE/MiLpwmGFhg1hCSegUUt1L3R0GJjQWHSt2mCQkwNYLqzL1PI4mMWNVLkKkpFpSTdv4DEj5VgVcJqhwP4tszjr5uU7CfY/KKyJO8FuxRSXrK/wByR77skgQY6KY0UbNwE=
