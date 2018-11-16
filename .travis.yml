@@ -9,7 +9,7 @@ script:
 - make test
 - make container VERSION=$TRAVIS_BRANCH
 after_success:
-- if [[ -z "$TRAVIS_TAG" ]]; then docker login -u $DOCKER_USERNAME
+- if [[ -n "$TRAVIS_TAG" ]]; then docker login -u $DOCKER_USERNAME
   -p $DOCKER_PASSWORD ; make push ; fi
 env:
   global:
