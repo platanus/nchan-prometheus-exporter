@@ -43,7 +43,7 @@ var (
 	// Defaults values
 	defaultListenAddress  = getEnv("LISTEN_ADDRESS", ":9113")
 	defaultMetricsPath    = getEnv("TELEMETRY_PATH", "/metrics")
-	defaultScrapeURI      = getEnv("CRAPE_URI", "http://127.0.0.1:8080/nchan_stub_status")
+	defaultScrapeURI      = getEnv("SCRAPE_URI", "http://127.0.0.1:8080/nchan_stub_status")
 	defaultNginx          = getEnvBool("NGINX", false)
 	defaultNginxScrapeURI = getEnv("NGINX_SCRAPE_URI", "http://127.0.0.1:8080/stub_status")
 	defaultSslVerify      = getEnvBool("SSL_VERIFY", true)
